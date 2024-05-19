@@ -1,0 +1,2 @@
+add_executable(uring_test Uring_unittest.cc)
+target_link_libraries(uring_test uring gtest_main)

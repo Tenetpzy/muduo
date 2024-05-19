@@ -13,6 +13,7 @@
 
 #include <atomic>
 #include <functional>
+#include <memory>
 #include <vector>
 
 #include <boost/any.hpp>
@@ -20,6 +21,7 @@
 #include "muduo/base/Mutex.h"
 #include "muduo/base/CurrentThread.h"
 #include "muduo/base/Timestamp.h"
+#include "muduo/file/Uring.h"
 #include "muduo/net/Callbacks.h"
 #include "muduo/net/TimerId.h"
 
@@ -31,6 +33,8 @@ namespace net
 class Channel;
 class Poller;
 class TimerQueue;
+
+using muduo::file::UringManager;
 
 ///
 /// Reactor, at most one per thread.
@@ -126,6 +130,9 @@ class EventLoop : noncopyable
   boost::any* getMutableContext()
   { return &context_; }
 
+  UringManager* getUringManager()
+  { return uringMgr_.get(); }
+
   static EventLoop* getEventLoopOfCurrentThread();
 
  private:
@@ -158,6 +165,9 @@ class EventLoop : noncopyable
 
   mutable MutexLock mutex_;
   std::vector<Functor> pendingFunctors_ GUARDED_BY(mutex_);
+
+  // For async I/O
+  std::unique_ptr<UringManager> uringMgr_;
 };
 
 }  // namespace net

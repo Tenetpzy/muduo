@@ -10,6 +10,7 @@
 
 #include "muduo/base/Logging.h"
 #include "muduo/base/Mutex.h"
+#include "muduo/file/Uring.h"
 #include "muduo/net/Channel.h"
 #include "muduo/net/Poller.h"
 #include "muduo/net/SocketsOps.h"
@@ -17,12 +18,14 @@
 
 #include <algorithm>
 
+#include <memory>
 #include <signal.h>
 #include <sys/eventfd.h>
 #include <unistd.h>
 
 using namespace muduo;
 using namespace muduo::net;
+using muduo::file::UringManager;
 
 namespace
 {
@@ -72,7 +75,8 @@ EventLoop::EventLoop()
     timerQueue_(new TimerQueue(this)),
     wakeupFd_(createEventfd()),
     wakeupChannel_(new Channel(this, wakeupFd_)),
-    currentActiveChannel_(NULL)
+    currentActiveChannel_(NULL),
+    uringMgr_(new UringManager(this))
 {
   LOG_DEBUG << "EventLoop created " << this << " in thread " << threadId_;
   if (t_loopInThisThread)

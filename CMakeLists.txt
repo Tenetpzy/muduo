@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.5)
 
 project(muduo C CXX)
 
@@ -12,6 +12,8 @@ endif()
 if(CMAKE_PROJECT_NAME STREQUAL "muduo")
   option(MUDUO_BUILD_EXAMPLES "Build Muduo examples" ON)
 endif()
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(CXX_FLAGS
  -g
@@ -105,6 +107,7 @@ message(STATUS "CXX_FLAGS = " ${CMAKE_CXX_FLAGS} " " ${CMAKE_CXX_FLAGS_${BUILD_T
 
 add_subdirectory(muduo/base)
 add_subdirectory(muduo/net)
+add_subdirectory(muduo/file)
 
 if(MUDUO_BUILD_EXAMPLES)
   add_subdirectory(contrib)

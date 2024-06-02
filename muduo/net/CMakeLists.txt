@@ -28,7 +28,7 @@ set(net_SRCS
   )
 
 add_library(muduo_net ${net_SRCS})
-target_link_libraries(muduo_net muduo_base)
+target_link_libraries(muduo_net muduo_base muduo_uring)
 
 #add_library(muduo_net_cpp11 ${net_SRCS})
 #target_link_libraries(muduo_net_cpp11 muduo_base_cpp11)

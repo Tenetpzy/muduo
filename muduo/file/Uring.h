@@ -54,7 +54,7 @@ User file handle, allow to register async IO operations.
 Register a file path to UringManager to get a file object(shared_ptr),
 file is closed when File object is destructed.
  */
-class File: std::enable_shared_from_this<File>
+class File: public std::enable_shared_from_this<File>
 {
 public:
 
@@ -137,7 +137,7 @@ private:
     */
     std::queue<IOContext> pendingIOs_;
 
-    static const unsigned URING_ENTRYS = 32;
+    static const unsigned URING_ENTRYS = 8;
 };
 
 }  // namespace file
